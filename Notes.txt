@@ -1,0 +1,90 @@
+install these plugins
+- Eclipse Temurin installerVersion 1.5 -- setup multiple versions for usage
+- Maven IntegrationVersion 3.23
+- Config File ProviderVersion 968.ve1ca_eb_913f8c
+- Pipeline Maven IntegrationVersion 1396.veb_f07b_2fc1d8
+- DockerVersion 1.6
+- Docker PipelineVersion 572.v950f58993843
+- KubernetesVersion 4203.v1dd44f5b_1cf9
+- Kubernetes Client APIVersion 6.10.0-240.v57880ce8b_0b_2
+- Kubernetes CredentialsVersion 0.11
+- Kubernetes CLIVersion 1.12.1
+
+- sonar-scanner is a tool this will analyse and generate the repor to sonarqube 
+
+-------------------------
+configure the plugins
+- tools
+    - JDK
+    - jdk17
+    - install automatically
+        Install from adoptium.net Version jdk-17.0.9+9.1
+    
+    - SonarQube Scanner installations
+        Name: sonar-scanner
+        - Install from Maven Central: sonarqube-scanner 5.0.1.3006
+    - Maven : 
+        Name: maven3
+        install version: 3.6.1
+    - Docker:
+        Name: Docker
+        install from Docker
+        version: latest
+            
+---------------------------------------------
+publish artifacts
+- add the snapshot and releases url to pom.xml File
+- just above the closing the line of the project 
+- paste this 
+
+<distributionManagement>
+  <repository>
+    <id>maven-releases</id>
+      <url>http://172.31.44.108:8081/repository/maven-releases/</url>
+      <--<url>click on the copy button on nexus repo for maven repleases !-->
+  </repository>
+  <snapshotRepository>
+    <id>maven-snapshots<id>
+      <url>http://172.31.44.108:8081/repository/maven-snapshots/</url>
+      <--<url>click on the copy button on nexus repo for maven snapshot !-->
+  </snapshotRepository>
+</distributionManagement>
+------------------------
+- still we are not added the Credentials of the nexus
+- we have Managed files sections will be there by installing the Config File Provider
+- open this
+- Add a new config
+- Global Maven settings.xml
+- at the bottom 
+- ID: global-setting(rename it )
+- Next
+- Content
+- in the Content look for -servers
+- from the line 120 to 124 it is commented
+- remove the --> from line 125 keep it at line 119
+before change
+-------------
+    <server>
+      <id>deploymentRepo</id>
+      <username>repouser</username>
+      <password>repopwd</password>
+    </server>
+------------------
+after change -- we need to change for both releases and snapshot
+--------------------------
+      <server>
+      <id>maven-releases</id>
+      <username>admin</username>
+      <password>(password)</password>
+    </server>
+     <server>
+      <id>maven-snapshots</id>
+      <username>admin</username>
+      <password>(password)</password>
+    </server>
+-----------------------------
+for maven deploy command
+- withMaven: Provide Maven Environment
+- Maven: maven3
+- jdk: jdk17
+- Global maven setting config: MyGlobalsetting
